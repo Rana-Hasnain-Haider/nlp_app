@@ -1,9 +1,20 @@
 # app.py
 import streamlit as st
+import nltk
 from UIpages.tokenizer import show_tokenizer_ui
 from UIpages.preprocessings import show_preprocessing_ui
 from UIpages.transformer_segmenter import show_segmenter_ui
+@st.cache_resource
+def download_nltk_data():
+    nltk.download('punkt')
+    nltk.download('punkt_tab')
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('maxent_ne_chunker')
+    nltk.download('words')
+    nltk.download('stopwords')  
 
+# Call this function at the start of your app
+download_nltk_data()
 st.set_page_config(page_title="NLTK Playground", page_icon="🧠", layout="centered")
 
 # Sidebar Navigation
