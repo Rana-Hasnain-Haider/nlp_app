@@ -2,6 +2,8 @@ import streamlit as st
 import nltk
 from nltk.probability import LidstoneProbDist
 from nltk.data import find
+import os
+
 from UIpages.tokenizer import show_tokenizer_ui
 from UIpages.preprocessings import show_preprocessing_ui
 from UIpages.preprocessings2 import show_preprocessing_ui2
@@ -19,7 +21,7 @@ from UIpages.home import (
 
 # --- NLTK Resource Downloader ---
 def ensure_nltk_resources():
-    resources = {
+    required_resources = {
         "punkt": "tokenizers/punkt",
         "averaged_perceptron_tagger": "taggers/averaged_perceptron_tagger",
         "maxent_ne_chunker": "chunkers/maxent_ne_chunker",
@@ -27,14 +29,16 @@ def ensure_nltk_resources():
         "omw-1.4": "corpora/omw-1.4",
         "stopwords": "corpora/stopwords",
     }
-    for name, path in resources.items():
-        try:
-            nltk.data.find(path)
-        except LookupError:
-            nltk.download(name)
 
-# Call this at the start of your app
-ensure_nltk_resources()
+    # Optional: custom nltk_data path for cloud environments
+    custom_nltk_path = os.path.join(os.getcwd(), "nltk_data")
+    nltk.data.path.append(custom_nltk_path)
+
+    for name, path in required_resources.items():
+        try:
+            find(path)
+        except LookupError:
+            nltk.download(name, download_dir=custom_nltk_path)
 
 # --- Custom Estimator ---
 def lidstone_estimator(fd, bins):
@@ -42,6 +46,10 @@ def lidstone_estimator(fd, bins):
 
 # --- Streamlit Config ---
 st.set_page_config(page_title="NLTK Playground", page_icon="🧠", layout="centered")
+
+# Ensure required resources are available
+ensure_nltk_resources()
+
 # Sidebar Navigation
 st.sidebar.title("Navigation")
 
@@ -89,7 +97,7 @@ elif st.session_state.page == "pos_taggers":
     show_pos_tagger_ui()
 
 else:
-    st.title("👋 Welcome")
+    st.title("👋 Welcomee")
     st.write("Please select a page from the sidebar.")
     show_tokenizer_home()
     show_preprocessing_home()
