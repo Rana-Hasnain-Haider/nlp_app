@@ -22,7 +22,7 @@ from UIpages.home import (
 # --- NLTK Resource Downloader ---
 def ensure_nltk_resources():
     required_resources = {
-        "punkt": "tokenizers/punkt",
+        "punkt_tab": "tokenizers/punkt",
         "averaged_perceptron_tagger": "taggers/averaged_perceptron_tagger",
         "maxent_ne_chunker": "chunkers/maxent_ne_chunker",
         "words": "corpora/words",
