@@ -30,6 +30,7 @@ def ensure_nltk_resources():
         "omw-1.4": "corpora/omw-1.4",
         "stopwords": "corpora/stopwords",
         "wordnet": "corpora/wordnet",
+        "maxent_ne_chunker_tab": "chunkers/maxent_ne_chunker_tab/english_ace_binary",
     }
 
     # Optional: custom nltk_data path for cloud environments
