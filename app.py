@@ -19,7 +19,7 @@ from UIpages.home import (
 
 # --- NLTK Resource Downloader ---
 def ensure_nltk_resources():
-    required_resources = {
+    resources = {
         "punkt": "tokenizers/punkt",
         "averaged_perceptron_tagger": "taggers/averaged_perceptron_tagger",
         "maxent_ne_chunker": "chunkers/maxent_ne_chunker",
@@ -27,12 +27,14 @@ def ensure_nltk_resources():
         "omw-1.4": "corpora/omw-1.4",
         "stopwords": "corpora/stopwords",
     }
-
-    for name, path in required_resources.items():
+    for name, path in resources.items():
         try:
-            find(path)
+            nltk.data.find(path)
         except LookupError:
             nltk.download(name)
+
+# Call this at the start of your app
+ensure_nltk_resources()
 
 # --- Custom Estimator ---
 def lidstone_estimator(fd, bins):
@@ -40,10 +42,6 @@ def lidstone_estimator(fd, bins):
 
 # --- Streamlit Config ---
 st.set_page_config(page_title="NLTK Playground", page_icon="🧠", layout="centered")
-
-# Ensure required resources are available
-ensure_nltk_resources()
-
 # Sidebar Navigation
 st.sidebar.title("Navigation")
 
