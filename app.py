@@ -1,12 +1,14 @@
 import streamlit as st
+import nltk
+from nltk.probability import LidstoneProbDist
+from nltk.data import find
 from UIpages.tokenizer import show_tokenizer_ui
 from UIpages.preprocessings import show_preprocessing_ui
 from UIpages.preprocessings2 import show_preprocessing_ui2
 from UIpages.transformer_segmenter import show_segmenter_ui
 from UIpages.language_models import show_ngram_ui
 from UIpages.POS_taggers import show_pos_tagger_ui
-from nltk.probability import LidstoneProbDist
-from UIpages.home import(
+from UIpages.home import (
     show_language_model_description,
     show_pos_tagger_home,
     show_preprocessing2_home,
@@ -14,11 +16,33 @@ from UIpages.home import(
     show_segmenter_description,
     show_tokenizer_home
 )
+
+# --- NLTK Resource Downloader ---
+def ensure_nltk_resources():
+    required_resources = {
+        "punkt": "tokenizers/punkt",
+        "averaged_perceptron_tagger": "taggers/averaged_perceptron_tagger",
+        "maxent_ne_chunker": "chunkers/maxent_ne_chunker",
+        "words": "corpora/words",
+        "omw-1.4": "corpora/omw-1.4",
+        "stopwords": "corpora/stopwords",
+    }
+
+    for name, path in required_resources.items():
+        try:
+            find(path)
+        except LookupError:
+            nltk.download(name)
+
+# --- Custom Estimator ---
 def lidstone_estimator(fd, bins):
     return LidstoneProbDist(fd, 0.1, bins)
 
-
+# --- Streamlit Config ---
 st.set_page_config(page_title="NLTK Playground", page_icon="🧠", layout="centered")
+
+# Ensure required resources are available
+ensure_nltk_resources()
 
 # Sidebar Navigation
 st.sidebar.title("Navigation")
@@ -26,7 +50,6 @@ st.sidebar.title("Navigation")
 if "page" not in st.session_state:
     st.session_state.page = "home"
 
-# Navigation buttons
 if st.sidebar.button("Home"):
     st.session_state.page = "home"
 
@@ -48,8 +71,6 @@ if st.sidebar.button("🧮 N-Gram Language Models"):
 if st.sidebar.button("🏷️ POS Taggers"):
     st.session_state.page = "pos_taggers"
 
-
-
 # Routing
 if st.session_state.page == "tokenizer":
     show_tokenizer_ui()
@@ -63,7 +84,7 @@ elif st.session_state.page == "preprocessing-II":
 elif st.session_state.page == "segmenter":
     show_segmenter_ui()
 
-elif st.session_state.page == "ngram-models":  # ← NEW route
+elif st.session_state.page == "ngram-models":
     show_ngram_ui()
 
 elif st.session_state.page == "pos_taggers":
