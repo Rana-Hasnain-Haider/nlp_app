@@ -24,6 +24,7 @@ def ensure_nltk_resources():
     required_resources = {
         "punkt_tab": "tokenizers/punkt",
         "averaged_perceptron_tagger": "taggers/averaged_perceptron_tagger",
+        "averaged_perceptron_tagger_en": "taggers/averaged_perceptron_tagger_en",
         "maxent_ne_chunker": "chunkers/maxent_ne_chunker",
         "words": "corpora/words",
         "omw-1.4": "corpora/omw-1.4",
