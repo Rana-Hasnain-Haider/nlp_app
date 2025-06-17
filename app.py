@@ -28,6 +28,7 @@ def ensure_nltk_resources():
         "words": "corpora/words",
         "omw-1.4": "corpora/omw-1.4",
         "stopwords": "corpora/stopwords",
+        "wordnet": "corpora/wordnet",
     }
 
     # Optional: custom nltk_data path for cloud environments
