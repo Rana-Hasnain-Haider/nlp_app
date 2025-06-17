@@ -3,11 +3,11 @@ import pandas as pd
 from typing import List, Tuple
 
 # Import preprocessing utilities
-from nlpFunc.other_preprocessing import (
-    remove_punctuation_with_whiteSpace,
-    remove_digits,
-    remove_stopWords,
-    expand_user_query,
+from nlpFunc.other_preprocessing2 import (
+    Lancaster_stemmer,
+    porter_stemmer,
+    NER,
+    lemmatize_sentence
 )
 
 
@@ -32,8 +32,7 @@ def _display_tuples(header: str, pairs: List[Tuple[str, str]]):
     else:
         st.info("No named entities found.")
 
-
-def show_preprocessing_ui():
+def show_preprocessing_ui2():
     """Streamlit page for common NLP preprocessing helpers."""
 
     st.title("🧹 Text Preprocessing Playground")
@@ -50,33 +49,22 @@ def show_preprocessing_ui():
 
 
     with row1[0]:
-        if st.button("✂️ Remove Punctuation") and _require_text(text):
-            cleaned = remove_punctuation_with_whiteSpace(text)
-            st.subheader("Without Punctuation")
-            st.write(cleaned)
+        if st.button("🌿 Lancaster Stemmer") and _require_text(text):
+            stems = Lancaster_stemmer(text)
+            _display_list("Lancaster Stems", stems)
 
     with row1[1]:
-        if st.button("🔢 Remove Digits") and _require_text(text):
-            cleaned = remove_digits(text)
-            st.subheader("Without Digits")
-            st.write(cleaned)
+        if st.button("🌱 Porter Stemmer") and _require_text(text):
+            stems = porter_stemmer(text)
+            _display_list("Porter Stems", stems)
 
     with row1[2]:
-        if st.button("🚫 Stop-Words") and _require_text(text):
-            # The helper expects an *iterable* of documents, not a single str.
-            stop_free = remove_stopWords([text])
-            _display_list("Stop-word-free Tokens", list(stop_free))
+        if st.button("🔤 WordNet Lemmatizer") and _require_text(text):
+            lemas = lemmatize_sentence(text)
+            _display_list("WordNet Lemas", lemas)
 
     with row1[3]:
-        if st.button("🔎 Expand Query") and _require_text(text):
-            result = expand_user_query(text)
-
-            st.subheader("📌 Original Query")
-            st.write(result['original_query'])
-
-            st.subheader("📚 Synonym Expansions")
-            st.text(result['synonym_expansions'])
-
-            st.subheader("📝 Expanded Query")
-            st.code(result['expanded_query'])
+        if st.button("🧑‍💼 Named Entities") and _require_text(text):
+            entities = NER(text)
+            _display_tuples("Named Entities", entities)
 
